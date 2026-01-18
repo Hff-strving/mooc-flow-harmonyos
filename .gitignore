@@ -1,0 +1,25 @@
+/node_modules
+/oh_modules
+/local.properties
+/.idea
+**/build
+/.hvigor
+.cxx
+/.clangd
+/.clang-format
+/.clang-tidy
+**/.test
+/.appanalyzer
+# Local runtime SQLite (do not commit)
+/data/*.db
+/data/*.db-*
+/data/*.db-shm
+/data/*.db-wal
+
+/data/sqlite-data
+
+# Local datasets (do not commit)
+/data/MOOCCube
+/data/MOOCCube_DS
+/data/pictures
+\n/.vscode\n
