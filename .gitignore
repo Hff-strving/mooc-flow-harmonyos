@@ -1,4 +1,4 @@
-/node_modules
+﻿/node_modules
 /oh_modules
 /local.properties
 /.idea
@@ -22,4 +22,9 @@
 /data/MOOCCube
 /data/MOOCCube_DS
 /data/pictures
-\n/.vscode\n
+
+/.vscode
+
+mooc_flow.db
+mooc_flow.db-*
+
