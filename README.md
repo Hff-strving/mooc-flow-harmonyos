@@ -1,85 +1,78 @@
-﻿# MOOC Flow（智学流）- HarmonyOS ArkTS 课程项目
+﻿<div align="right">
+  <a href="README.md"><img alt="English" src="https://img.shields.io/badge/language-English-blue"></a>
+  <a href="README.zh-CN.md"><img alt="简体中文" src="https://img.shields.io/badge/语言-简体中文-red"></a>
+</div>
 
-一款基于 MOOCCube 裁剪数据的效率型教育应用，集「课程发现 / 学习计划（收藏）/ 专注倒计时 / 白噪音伴学 / 学习数据统计 / 系统分享」于一体。
+# MOOC Flow (智学流) - HarmonyOS ArkTS Course Project
 
-## 功能概览
+An efficiency-focused education app based on a trimmed subset of the open **MOOCCube** dataset, featuring **Course Discovery**, **Study Plan (Favorites)**, **Focus Timer**, **White Noise / Music Companion**, **Study Analytics**, and **System Share**.
 
-- 注册/登录：本地 SQLite（HarmonyOS RDB）持久化用户信息
-- 课程发现：首页分类筛选 + 搜索 + 课程列表（来自 `resources/rawfile/mooc_data.json`）
-- 课程详情：课程封面/简介展示；收藏（加入学习计划）；开始专注；分享课程（调用系统消息能力）
-- 专注学习：番茄钟倒计时（15/25/45 + 自定义时长）；支持暂停/继续/停止保存；专注记录写入数据库
-- 白噪音/音乐：从 `resources/rawfile/` 发现音频并用 AVPlayer 播放；播放失败不影响计时（有提示）
-- 个人中心：总专注时长/学习次数/收藏课程数；TOP3；最近专注；学习计划列表
+## Features
 
-## 技术栈
+- Auth: register & login with local SQLite (HarmonyOS RDB)
+- Course discovery: category filters + search + course list (from `entry/src/main/resources/rawfile/mooc_data.json`)
+- Course detail: cover/info; favorite (study plan); start focus; share via system messaging ability
+- Focus: Pomodoro-style timer (15/25/45 + custom duration), start/pause/resume/stop, writes study records to DB
+- Audio: discover audio in `resources/rawfile/` and play via AVPlayer; playback failure does not block the timer (with toast)
+- Profile: total focus minutes, study count, favorite count; top-3 ranking; recent study; study plan list
 
-- UI：ArkTS + ArkUI（声明式 UI）
-- 路由：`@ohos.router`
-- 本地数据库：`@ohos.data.relationalStore`（RdbStore / SQLite）
-- 音频：`@ohos.multimedia.media`（AVPlayer）
-- 资源：`resourceManager`（rawfile / media）
+## Tech Stack
 
-## 页面与代码结构
+- UI: ArkTS + ArkUI (declarative UI)
+- Routing: `@ohos.router`
+- Local DB: `@ohos.data.relationalStore` (RdbStore / SQLite)
+- Audio: `@ohos.multimedia.media` (AVPlayer)
+- Resources: `resourceManager` (rawfile / media)
 
-页面（`entry/src/main/ets/pages`）：
+## Pages & Code Structure
 
-- `LoginPage.ets`：注册/登录
-- `HomePage.ets`：课程发现 + 搜索/筛选 + 统计卡片
-- `DetailPage.ets`：课程详情 + 收藏 + 分享 + 跳转专注
-- `FocusPage.ets`：专注倒计时 + 自定义时长 + 音频选择/播放
-- `ProfilePage.ets`：个人中心 + 统计 + TOP3 + 最近专注 + 学习计划
+Pages (`entry/src/main/ets/pages`):
 
-核心工具（`entry/src/main/ets/utils`）：
+- `LoginPage.ets`: register / login
+- `HomePage.ets`: course discovery + search/filter + stats cards
+- `DetailPage.ets`: course detail + favorite + share + jump to focus
+- `FocusPage.ets`: focus timer + custom duration + audio selection/playback
+- `ProfilePage.ets`: profile + stats + top-3 + recent + study plan
 
-- `DatabaseHelper.ets`：建表、登录/注册、收藏、学习记录、统计缓存刷新
-- `FocusSessionManager.ets`：专注会话管理（计时、暂停、结束写库、跨页面保持）
-- `CourseRepository.ets`：读取 `mooc_data.json` 并缓存课程列表
-- `AudioDiscovery.ets`：发现 rawfile 音频（含 manifest 兜底）
-- `AudioManager.ets`：AVPlayer 封装（load/play/pause/stop + 错误回调）
+Core utils (`entry/src/main/ets/utils`):
 
-## 数据与资源
+- `DatabaseHelper.ets`: schema + auth + favorites + study records + stats cache refresh
+- `FocusSessionManager.ets`: focus session lifecycle (timer, pause, commit on finish)
+- `CourseRepository.ets`: loads `mooc_data.json` and caches courses
+- `AudioDiscovery.ets`: discovers rawfile audio (manifest fallback)
+- `AudioManager.ets`: AVPlayer wrapper (load/play/pause/stop + error callbacks)
 
-- 课程数据：`entry/src/main/resources/rawfile/mooc_data.json`（MOOCCube 裁剪子集）
-- 音频清单：`entry/src/main/resources/rawfile/audio_manifest.json`
-- 音频文件：`entry/src/main/resources/rawfile/*.mp3`（或其他音频格式）
-- 课程封面：`entry/src/main/resources/base/media/`、`entry/src/main/resources/course/`（按项目实际放置）
-- 校徽：`entry/src/main/resources/base/schools/`
+## Data & Resources
 
-## 数据库说明（SQLite / RDB）
+- Courses: `entry/src/main/resources/rawfile/mooc_data.json` (trimmed MOOCCube subset)
+- Audio manifest: `entry/src/main/resources/rawfile/audio_manifest.json`
+- Audio files: `entry/src/main/resources/rawfile/*.mp3` / `*.wav`
+- Covers/icons: `entry/src/main/resources/base/media/` (and other project folders as used)
 
-数据库文件名：`mooc_flow.db`（见 `entry/src/main/ets/utils/DatabaseHelper.ets`）。
+## Database (SQLite / RDB)
 
-表结构：
+Database name: `mooc_flow.db` (see `entry/src/main/ets/utils/DatabaseHelper.ets`).
 
-- `User`：用户表（`username` 唯一）
-- `Favorite`：收藏/学习计划（`(user_id, course_id)` 唯一）
-- `StudyRecord`：专注记录（`duration` 秒、`create_time` 时间戳；白噪音专注使用 `course_id='noise'`）
+Tables:
 
-数据库文件位于应用沙箱（包名见 `AppScope/app.json5`）：
+- `User` (unique `username`)
+- `Favorite` (unique `(user_id, course_id)`)
+- `StudyRecord` (`duration` in seconds; `course_id='noise'` for white-noise focus)
 
-- 常见路径（真机/模拟器其一存在）：
-  - `/data/storage/el2/database/<bundleName>/rdb/mooc_flow.db`
-  - `/data/storage/el1/database/<bundleName>/rdb/mooc_flow.db`
+The DB file is stored in the app sandbox (bundle name in `AppScope/app.json5`), e.g.:
 
-## 构建与运行
+- `/data/storage/el2/database/<bundleName>/rdb/mooc_flow.db`
+- `/data/storage/el1/database/<bundleName>/rdb/mooc_flow.db`
 
-推荐：使用 DevEco Studio 打开项目并运行到模拟器/真机。
+## Build & Run
 
-命令行构建（可选）：
+Recommended: open and run with **DevEco Studio**.
 
-1. 配置 HarmonyOS SDK 环境变量（示例）：
-   - `DEVECO_SDK_HOME=E:\DevEco Studio\sdk`
-2. 运行 hvigor：
-   - `E:\DevEco Studio\tools\hvigor\bin\hvigorw.bat -p entry assembleHap --no-daemon`
+Optional CLI build:
 
-## 截图与文档
+- Set SDK path (example): `DEVECO_SDK_HOME=E:\DevEco Studio\sdk`
+- Build: `E:\DevEco Studio\tools\hvigor\bin\hvigorw.bat -p entry assembleHap --no-daemon`
 
-实验报告中建议展示：
+## Notes
 
-- 页面流程/跳转总图、E-R 图、三表结构截图
-- 关键界面：登录、首页、课程详情、专注（含自定义时长与音频选择）、个人中心
-- 核心代码：`DatabaseHelper`、`FocusSessionManager`、`AudioManager/AudioDiscovery`、典型 UI 布局（Stack/Scroll）
-
-## 免责声明
-
-本项目为课程作业用途，数据库中密码为明文存储，仅用于演示本地存储/登录流程；实际产品应进行加盐哈希等安全处理。
+This is a course project. Passwords are stored in plaintext for demonstration purposes only; production apps should use salted hashing.
